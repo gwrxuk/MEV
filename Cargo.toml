@@ -1,0 +1,87 @@
+[package]
+name = "mev-capture"
+version = "0.1.0"
+edition = "2021"
+authors = ["Your Name <your.email@example.com>"]
+description = "High-performance MEV infrastructure for block building and liquid staking on Monad"
+license = "MIT"
+readme = "README.md"
+
+[dependencies]
+# Async runtime
+tokio = { version = "1.31.0", features = ["full", "tracing"] }
+futures = "0.3.28"
+
+# Web server and API framework
+axum = "0.6.20"
+tower = "0.4.13"
+tower-http = { version = "0.4.4", features = ["trace", "cors", "request-id"] }
+hyper = { version = "0.14", features = ["full"] }
+
+# Serialization/Deserialization
+serde = { version = "1.0.180", features = ["derive"] }
+serde_json = "1.0.104"
+serde_yaml = "0.9.25"
+
+# Ethereum and blockchain interactions
+ethers = { version = "2.0.8", features = ["ws", "rustls"] }
+revm = "3.5.0"
+hex = "0.4.3"
+
+# Database
+sqlx = { version = "0.7.1", features = ["runtime-tokio-rustls", "postgres", "json", "chrono", "uuid"] }
+redis = { version = "0.23.3", features = ["tokio-comp", "connection-manager"] }
+
+# Cryptography and hashing
+sha2 = "0.10.7"
+sha3 = "0.10.8"
+secp256k1 = { version = "0.27.0", features = ["rand", "recovery"] }
+
+# Logging and metrics
+tracing = "0.1.37"
+tracing-subscriber = { version = "0.3.17", features = ["env-filter", "json"] }
+opentelemetry = { version = "0.20.0", features = ["metrics", "rt-tokio"] }
+metrics = "0.21.1"
+prometheus = "0.13.3"
+
+# Configuration
+config = "0.13.3"
+clap = { version = "4.3.21", features = ["derive", "env"] }
+dotenv = "0.15.0"
+
+# Utils
+thiserror = "1.0.44"
+anyhow = "1.0.72"
+chrono = { version = "0.4.26", features = ["serde"] }
+dashmap = "5.5.0"
+uuid = { version = "1.4.1", features = ["v4", "serde"] }
+rayon = "1.7.0"
+parking_lot = "0.12.1"
+async-trait = "0.1.72"
+paste = "1.0.14"
+lru = "0.11.1"
+
+[dev-dependencies]
+criterion = "0.5.1"
+mockall = "0.11.4"
+rstest = "0.18.2"
+test-log = "0.2.12"
+tokio-test = "0.4.2"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
+
+[profile.dev.package."*"]
+opt-level = 3
+
+[[bench]]
+name = "transaction_ordering"
+harness = false
+
+[[bench]]
+name = "block_building"
+harness = false
